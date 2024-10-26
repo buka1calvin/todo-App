@@ -18,16 +18,14 @@ const ProjectNav = () => {
           <li>
             <Link to="/dashboard/projects">Workspace</Link>
           </li>
-          {currentProject ? (
             <>
               <li>
-                <Link to="">{currentProject.category}</Link>
+                <Link to="" className={`${currentProject ? "":"text-gray-400"}`}>{currentProject?.category || "Category-All"}</Link>
               </li>
               <li>
-                <span className="font-bold">{currentProject?.name}</span>
+                <span className={`${currentProject ? "font-bold":"text-gray-400"}`}>{currentProject?.name || "project-All"}</span>
               </li>
             </>
-          ) : null}
         </ul>
       </div>
       <div className="text-sm flex flex-col py-1 gap-2">

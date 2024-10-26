@@ -8,15 +8,18 @@ type User = {
 };
 
 type Task = {
-  id: number;
+  id?: number;
   todo: string;
   completed: boolean;
-  userId: number;
+  userId?: number;
   priority?: string;
   description?: string;
   dueDate?: string;
   assignees?: string[];
-  files?: File[]; // Attach files to a task
+  files?: File[];
+  from?: string;
+  toDate?: string;
+  assignees:string[]
 };
 
 type Project = {
@@ -27,4 +30,9 @@ type Project = {
   imageUrl?: string; // Optional image for the project
   status?: string; // Optional status field for the project
   category: string;
+};
+
+type Avatar = {
+  src: string;
+  alt: string;
 };

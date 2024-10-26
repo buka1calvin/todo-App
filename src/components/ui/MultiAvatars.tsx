@@ -1,16 +1,18 @@
 import React from 'react';
 
-type Avatar = {
-  src: string;
-  alt: string;
-};
+
 
 interface MultiAvatarProps {
-  avatars: Avatar[] ;
-  maxAvatars?: number | undefined;
+  avatars: Avatar[];
+  maxAvatars?: number;
+  showSurplus?: boolean;
 }
 
-const MultiAvatar: React.FC<MultiAvatarProps> = ({ avatars, maxAvatars = 4 }) => {
+const MultiAvatar: React.FC<MultiAvatarProps> = ({
+  avatars,
+  maxAvatars = 4,
+  showSurplus = true,
+}) => {
   const surplus = avatars.length - maxAvatars;
 
   return (
@@ -23,7 +25,7 @@ const MultiAvatar: React.FC<MultiAvatarProps> = ({ avatars, maxAvatars = 4 }) =>
           className="w-7 h-7 rounded-full border border-purple-500 object-cover bg-gray-200"
         />
       ))}
-      {surplus > 0 && (
+      {showSurplus && surplus > 0 && (
         <div className="w-7 h-7 flex items-center justify-center rounded-full border border-white bg-gray-400 text-white text-xs">
           +{surplus}
         </div>

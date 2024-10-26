@@ -40,7 +40,7 @@ export default function NavLinks() {
             {isActive && (
               <div className="absolute left-0 top-0 w-1 rounded-r-lg h-full bg-purple-600"></div>
             )}
-            <LinkIcon className="w-4 h-4 text-gray-500" />
+            <LinkIcon className={`${isActive ? "text-purple-600":"text-gray-500"} w-4 h-4`} />
           </Link>
         );
       })}
