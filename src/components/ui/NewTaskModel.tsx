@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import Chip from "./Chip";
-
-
+import { useTranslation } from "react-i18next";
 
 interface NewTaskModalProps {
   users: User[];
@@ -31,6 +30,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
   });
   const [userSearch, setUserSearch] = useState("");
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isOpen) {
@@ -80,8 +80,14 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
   };
 
   const handleCreateTask = () => {
-    if (!taskDetails.todo || !taskDetails.description || selectedUsers.length === 0) {
-      alert("Please provide task title, description, and select at least one assignee.");
+    if (
+      !taskDetails.todo ||
+      !taskDetails.description ||
+      selectedUsers.length === 0
+    ) {
+      alert(
+        "Please provide task title, description, and select at least one assignee."
+      );
       return;
     }
 
@@ -93,21 +99,25 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
       assignees: selectedUsers.map((user) => user.id.toString()),
       projectId: project.id, // Set the project ID here
     };
-  
+
     console.log("New Task created:", newTask);
     onCreateTask(newTask); // Call the onCreateTask prop with the new task
     setIsOpen(false);
   };
-  
 
   return (
     <dialog ref={modalRef} className="modal dark:bg-white/10">
       <div className="modal-box p-5 dark:bg-gray-900">
-        <h3 className="font-bold text-lg mb-4 dark:text-white">Create New Task for {project.name}</h3>
+        <h3 className="font-bold text-lg mb-4 dark:text-white">
+          {" "}
+          {t("dashboard.newTask.title", { projectName: project.name })}
+        </h3>
 
         {/* Task Title */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Task Title</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+          {t("dashboard.newTask.taskTitle")}
+          </label>
           <input
             type="text"
             name="todo"
@@ -120,7 +130,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
 
         {/* Description */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Description</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+          {t("dashboard.newTask.description")}
+          </label>
           <textarea
             name="description"
             value={taskDetails.description}
@@ -133,7 +145,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
         {/* Dates and Priority */}
         <div className="mb-4 flex gap-4">
           <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">From Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+            {t("dashboard.newTask.fromDate")}
+            </label>
             <input
               type="date"
               name="from"
@@ -143,7 +157,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">To Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+            {t("dashboard.newTask.toDate")}
+            </label>
             <input
               type="date"
               name="toDate"
@@ -156,7 +172,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
 
         <div className="mb-4 flex gap-4">
           <div className="w-1/2 dark:text-white">
-            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Due Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+            {t("dashboard.newTask.dueDate")}
+            </label>
             <input
               type="date"
               name="dueDate"
@@ -166,41 +184,49 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Priority</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+            {t("dashboard.newTask.priority")}
+            </label>
             <select
               name="priority"
               value={taskDetails.priority}
               onChange={handleInputChange}
               className="select w-full text-sm border border-green-400 dark:bg-gray-700 dark:text-white"
             >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
+              <option value="Low">{t("dashboard.newTask.low")}</option>
+              <option value="Medium">{t("dashboard.newTask.medium")}</option>
+              <option value="High">{t("dashboard.newTask.high")}</option>
             </select>
           </div>
         </div>
 
         {/* Access Level */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Access Level</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+          {t("dashboard.newTask.accessLevel")}
+          </label>
           <select
             name="access"
             value={taskDetails.access}
             onChange={handleInputChange}
             className="select w-full text-sm border border-green-400 dark:bg-gray-700 dark:text-white"
           >
-            <option value="Limited Access">Limited Access</option>
-            <option value="Full Access">Full Access</option>
-            <option value="All Access">All Access</option>
+            <option value="Limited Access">
+            {t("dashboard.newTask.limitedAccess")}
+              </option>
+            <option value="Full Access">{t("dashboard.newTask.fullAccess")}</option>
+            <option value="All Access">{t("dashboard.newTask.allAccess")}</option>
           </select>
         </div>
 
         {/* User Selection */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Assign Users</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+          {t("dashboard.newTask.assignUsers")}
+          </label>
           <input
             type="text"
-            placeholder="Search user..."
+            placeholder={t("dashboard.newTask.searchUser")}
             value={userSearch}
             onChange={(e) => setUserSearch(e.target.value)}
             className="input w-full mb-2 text-sm border border-green-400 dark:bg-white/10 dark:text-white"
@@ -218,7 +244,11 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
           </div>
           <div className="flex flex-wrap mt-2">
             {selectedUsers.map((user) => (
-              <Chip key={user.id} label={user.firstName} onRemove={() => handleRemoveUser(user.id)} />
+              <Chip
+                key={user.id}
+                label={user.firstName}
+                onRemove={() => handleRemoveUser(user.id)}
+              />
             ))}
           </div>
         </div>
@@ -226,14 +256,14 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
         {/* Buttons */}
         <div className="flex justify-end space-x-4">
           <button className="btn" onClick={() => setIsOpen(false)}>
-            Close
+          {t("dashboard.newTask.close")}
           </button>
           <button
             className="btn btn-primary dark:text-white"
             onClick={handleCreateTask}
             disabled={!taskDetails.todo || selectedUsers.length === 0}
           >
-            Create Task
+            {t("dashboard.newTask.createTask")}
           </button>
         </div>
       </div>

@@ -10,12 +10,12 @@ const DashLayout = () => {
         <SideNav />
       </div>
       <div className="w-full flex flex-col">
-        <TopNavbar className="lg:block hidden" />
+        <TopNavbar />
         <div className="flex-grow w-full px-2 pb-24 md:p-4 h-full">
           <Outlet />
         </div>
       </div>
-      <div className="lg:hidden fixed bottom-0 w-full  border-t shadow">
+      <div className="lg:hidden fixed bottom-0 w-full border-t shadow">
         <BottomNav />
       </div>
     </main>

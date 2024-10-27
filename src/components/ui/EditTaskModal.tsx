@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Chip from "./Chip";
+import { useTranslation } from "react-i18next";
 
 interface EditTaskModalProps {
   users: User[];
@@ -18,10 +19,15 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const [selectedUsers, setSelectedUsers] = useState<User[]>(task?.assignees?.map(id => users.find(user => user.id === Number(id))).filter(Boolean) as User[]);
+  const [selectedUsers, setSelectedUsers] = useState<User[]>(
+    task?.assignees
+      ?.map((id) => users.find((user) => user.id === Number(id)))
+      .filter(Boolean) as User[]
+  );
   const [taskDetails, setTaskDetails] = useState<Task>({ ...task });
   const [userSearch, setUserSearch] = useState("");
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isOpen) {
@@ -34,9 +40,16 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
     }
   }, [isOpen, task]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, type } = e.target;
-    const value = type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value;
+    const value =
+      type === "checkbox"
+        ? (e.target as HTMLInputElement).checked
+        : e.target.value;
     setTaskDetails((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -57,7 +70,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
   const handleEditTask = () => {
     const editedTask: Task = {
       ...taskDetails,
-      assignees: selectedUsers.map(user => user.id.toString()),
+      assignees: selectedUsers.map((user) => user.id.toString()),
     };
     onEditTask(editedTask);
     setIsOpen(false);
@@ -66,11 +79,15 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
   return (
     <dialog ref={modalRef} className="modal dark:bg-white/10">
       <div className="modal-box p-5 dark:bg-gray-900">
-        <h3 className="font-bold text-lg mb-4 dark:text-white">Edit Task for {project.name}</h3>
+        <h3 className="font-bold text-lg mb-4 dark:text-white">
+          {t("dashboard.editTask.title", { projectName: project.name })}
+        </h3>
 
         {/* Task Details */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">Task Title</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">
+            {t("dashboard.editTask.taskTitle")}
+          </label>
           <input
             type="text"
             name="todo"
@@ -81,7 +98,9 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">Description</label>
+          <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">
+            {t("dashboard.editTask.description")}
+          </label>
           <textarea
             name="description"
             value={taskDetails.description}
@@ -94,7 +113,9 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         {/* Dates and Priority */}
         <div className="mb-4 flex gap-4">
           <div className="w-1/2">
-            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">From Date</label>
+            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">
+              {t("dashboard.editTask.fromDate")}
+            </label>
             <input
               type="date"
               name="from"
@@ -104,7 +125,9 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">To Date</label>
+            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">
+              {t("dashboard.editTask.toDate")}
+            </label>
             <input
               type="date"
               name="toDate"
@@ -117,7 +140,9 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
         <div className="mb-4 flex gap-4">
           <div className="w-1/2">
-            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">Due Date</label>
+            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">
+              {t("dashboard.editTask.dueDate")}
+            </label>
             <input
               type="date"
               name="dueDate"
@@ -127,16 +152,18 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">Priority</label>
+            <label className="block text-sm font-medium dark:text-white text-gray-700 mb-2">
+              {t("dashboard.editTask.priority")}
+            </label>
             <select
               name="priority"
               value={taskDetails.priority}
               onChange={handleInputChange}
               className="select w-full text-sm dark:bg-gray-700 border dark:text-white border-green-400"
             >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
+              <option value="Low"> {t("dashboard.editTask.low")}</option>
+              <option value="Medium">{t("dashboard.editTask.medium")}</option>
+              <option value="High">{t("dashboard.editTask.high")}</option>
             </select>
           </div>
         </div>
@@ -151,31 +178,44 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
               onChange={handleInputChange}
               className="form-checkbox dark:text-white"
             />
-            <span className="ml-2 dark:text-white">Completed</span>
+            <span className="ml-2 dark:text-white">
+              {" "}
+              {t("dashboard.editTask.completed")}
+            </span>
           </label>
         </div>
 
         {/* Access Level */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">Access Level</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">
+            {t("dashboard.editTask.accessLevel")}
+          </label>
           <select
             name="access"
             value={taskDetails.access}
             onChange={handleInputChange}
             className="select w-full text-sm border border-green-400 dark:bg-gray-700 dark:text-white"
           >
-            <option value="Limited Access">Limited Access</option>
-            <option value="Full Access">Full Access</option>
-            <option value="All Access">All Access</option>
+            <option value="Limited Access">
+              {t("dashboard.editTask.limitedAccess")}
+            </option>
+            <option value="Full Access">
+              {t("dashboard.editTask.fullAccess")}
+            </option>
+            <option value="All Access">
+              {t("dashboard.editTask.allAccess")}
+            </option>
           </select>
         </div>
 
         {/* User Selection */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">Assign Users</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">
+            {t("dashboard.editTask.assignUsers")}
+          </label>
           <input
             type="text"
-            placeholder="Search user..."
+            placeholder={t("dashboard.editTask.searchUser")}
             value={userSearch}
             onChange={(e) => setUserSearch(e.target.value)}
             className="input w-full mb-2 text-sm border dark:bg-white/10 dark:text-white border-green-400"
@@ -193,15 +233,26 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
           </div>
           <div className="flex flex-wrap mt-2">
             {selectedUsers?.map((user) => (
-              <Chip key={user.id} label={user.firstName} onRemove={() => handleRemoveUser(user.id)} />
+              <Chip
+                key={user.id}
+                label={user.firstName}
+                onRemove={() => handleRemoveUser(user.id)}
+              />
             ))}
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="modal-action">
-          <button className="btn" onClick={() => setIsOpen(false)}>Cancel</button>
-          <button className="btn btn-primary dark:text-white" onClick={handleEditTask}>Save</button>
+          <button className="btn" onClick={() => setIsOpen(false)}>
+            {t("dashboard.editTask.cancel")}
+          </button>
+          <button
+            className="btn btn-primary dark:text-white"
+            onClick={handleEditTask}
+          >
+            {t("dashboard.editTask.save")}
+          </button>
         </div>
       </div>
     </dialog>

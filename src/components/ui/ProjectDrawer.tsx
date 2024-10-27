@@ -4,6 +4,7 @@ import { GrGroup } from "react-icons/gr";
 import { TiStarOutline } from "react-icons/ti";
 import { AiOutlineClose } from "react-icons/ai"; // Close icon
 import ChatRoom from "./ChatRoom";
+import { useTranslation } from "react-i18next";
 
 interface Avatar {
   src: string;
@@ -17,12 +18,21 @@ interface DrawerProps {
   project: Project;
 }
 
-const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, avatars, project }) => {
+const Drawer: React.FC<DrawerProps> = ({
+  isOpen,
+  onClose,
+  avatars,
+  project,
+}) => {
+  const { t } = useTranslation();
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) {
+      if (
+        drawerRef.current &&
+        !drawerRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -58,19 +68,25 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, avatars, project }) =>
           className="sm:hidden w-full text-gray-500 self-end sticky top-0 bg-white py-2 flex justify-end"
           aria-label="Close drawer"
         >
-          <AiOutlineClose size={20} className="text-primary p-1 rounded border border-primary" />
+          <AiOutlineClose
+            size={20}
+            className="text-primary p-1 rounded border border-primary"
+          />
         </button>
 
         <div className="flex justify-between text-sm">
-          <h1 className="font-semibold dark:text-white">Project Overview</h1>
-          <p className="text-primary">See All</p>
+          <h1 className="font-semibold dark:text-white">
+            {" "}
+            {t("dashboard.drawer.projectOverview")}
+          </h1>
+          <p className="text-primary"> {t("dashboard.drawer.seeAll")}</p>
         </div>
 
         <div className="bg-slate-100 dark:bg-white/10 rounded-md text-xs dark:border dark:border-gray-500">
           <div className="flex p-2 gap-3 items-center">
             <p className="flex items-center gap-2 font-semibold text-gray-400">
               <LuCalendarDays />
-              Time Line:
+              {t("dashboard.drawer.timeline")}:
             </p>
             <p className="flex gap-1 dark:text-white">
               <span>April 14</span>-<span>May 7</span>
@@ -79,12 +95,12 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, avatars, project }) =>
           <div className="flex p-2 gap-3 items-start">
             <p className="flex items-center gap-2 font-semibold text-gray-400">
               <GrGroup />
-              Team:
+              {t("dashboard.drawer.team")}:
             </p>
             <div className="grid md:grid-cols-3 gap-1 grid-cols-2">
               {avatars?.map((avatar) => (
                 <img
-                  key={avatar.src} // Add a key here
+                  key={avatar.src}
                   src={avatar.src}
                   alt={avatar.alt}
                   className="h-5 w-5 rounded-full border border-green-500"
@@ -95,10 +111,10 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, avatars, project }) =>
           <div className="flex p-2 gap-3 items-center">
             <p className="flex items-center gap-2 font-semibold text-gray-400">
               <TiStarOutline />
-              Status:
+              {t("dashboard.drawer.status")}:
             </p>
             <p className="flex gap-1 font-medium dark:text-white">
-              {!project.status && "Unknown"}
+              {!project.status && `${t("dashboard.drawer.unknown")}`}
             </p>
           </div>
         </div>

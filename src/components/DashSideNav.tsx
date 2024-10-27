@@ -22,7 +22,7 @@ const SideNav = () => {
         className="mb-2 flex justify-center rounded-md w-full items-center h-[80px]"
         to="/"
       >
-        LOGO
+        <img src="/images/calendar.png" alt="" className="h-8" />
       </Link>
       <div className="h-full w-full flex flex-col justify-between">
         <div className="flex grow flex-row lg:justify-between space-x-2 md:flex-col border-b-2 border-gray-200 pb-7 dark:border-gray-700">

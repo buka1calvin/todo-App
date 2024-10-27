@@ -4,8 +4,10 @@ import ProjectCard from "../../ui/ProjectCard";
 import useSearch from "../../../hooks/useSearch";
 import { MoonLoader } from "react-spinners";
 import { RiEqualizerLine } from "react-icons/ri";
+import { useTranslation } from "react-i18next";
 
 const ProjectsList = () => {
+  const {t}=useTranslation()
   const { projects, isLoading, error } = useTaskContext();
   const [filterByStatus, setFilterByStatus] = useState<string>("");
   const { query, handleSearch, filteredData } = useSearch(projects || [], {
@@ -29,7 +31,7 @@ const ProjectsList = () => {
   }
 
   if (error) {
-    return <p>Error loading projects: {error.toString()}</p>;
+    return <p>{t("dashboard.projectsList.errorLoading", { error: error.toString() })}</p>;
   }
 
   return (
@@ -37,7 +39,7 @@ const ProjectsList = () => {
       <div className="mb-4 w-full flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
         <input
           type="text"
-          placeholder="Search projects..."
+          placeholder={t("dashboard.projectsList.searchPlaceholder")}
           value={query}
           onChange={handleSearch}
           className="input input-bordered border-gray-500 w-full dark:bg-white/10 px-4 py-2 rounded-md text-gray-700 dark:text-white"
@@ -50,16 +52,16 @@ const ProjectsList = () => {
             className="select select-bordered dark:bg-white/10 dark:text-white w-full py-2 px-3 rounded-md text-gray-700"
           >
             <option value="" className="text-gray-700 dark:text-gray-400">
-              All Statuses
+            {t("dashboard.projectsList.allStatuses")}
             </option>
             <option value="completed" className="text-gray-700 dark:text-gray-400">
-              Completed
+            {t("dashboard.projectsList.completed")}
             </option>
             <option value="in-progress" className="text-gray-700 dark:text-gray-400">
-              In Progress
+            {t("dashboard.projectsList.inProgress")}
             </option>
             <option value="pending" className="text-gray-700 dark:text-gray-400">
-              Pending
+            {t("dashboard.projectsList.pending")}
             </option>
           </select>
         </div>
