@@ -34,7 +34,7 @@ const Selection: React.FC<DropdownProps> = ({ options, selected, onSelect }) => 
     return (
         <div className="relative inline-block text-gray-700" ref={dropdownRef}>
             <div
-                className="flex items-center gap-1 cursor-pointer text-gray-400"
+                className="flex items-center gap-1 cursor-pointer text-gray-400 dark:text-gray-200"
                 onClick={toggleDropdown}
             >
                 <p className="text-sm font-semibold">{selected}</p>

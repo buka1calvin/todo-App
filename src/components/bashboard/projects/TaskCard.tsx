@@ -1,5 +1,4 @@
-// TaskCard.tsx
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { HiOutlineChat } from "react-icons/hi";
 import TaskDropdown from "../../ui/TaskDropDown";
 import MultiAvatar from "../../ui/MultiAvatars";
@@ -9,9 +8,9 @@ interface TaskCardProps {
   todo: string;
   completed: boolean;
   avatars: Avatar[] | undefined;
-  task: Task; // Assuming you have a Task type
+  task: Task; 
   onEditTask: (editedTask: Task) => void;
-  project: Project; // Include Project type
+  project: Project;
   users:User[]
 }
 
@@ -26,7 +25,7 @@ const TaskCard: FC<TaskCardProps> = ({ todo, completed, avatars, task, onEditTas
         console.log("Review selected");
         break;
       case "Edit":
-        setEditModalOpen(true); // Open the edit modal
+        setEditModalOpen(true);
         break;
       case "Delete":
         console.log("Delete selected");
@@ -37,7 +36,7 @@ const TaskCard: FC<TaskCardProps> = ({ todo, completed, avatars, task, onEditTas
   };
 
   return (
-    <div className="card bg-white p-3 gap-2 text-sm">
+    <div className="card bg-white dark:bg-white/15 p-3 gap-2 text-sm">
       <img src={defaultAvatar} alt={todo} className="rounded-lg h-32" />
       <div className="flex justify-between items-center">
         <p
@@ -49,14 +48,14 @@ const TaskCard: FC<TaskCardProps> = ({ todo, completed, avatars, task, onEditTas
         </p>
         <TaskDropdown
           options={["Review", "Edit", "Delete"]}
-          onSelect={handleOptionSelect} // Pass the onSelect function
+          onSelect={handleOptionSelect}
         />
       </div>
       <div className="h-full">
-        <h1 className="text-xl font-bold">{todo}</h1>
-        <p className="text-gray-500">subTitle</p>
+        <h1 className="text-xl font-bold dark:text-white">{todo}</h1>
+        <p className="text-gray-500 dark:text-gray-200">subTitle</p>
       </div>
-      <div className="flex justify-between text-gray-500 border-t border-gray-300 py-[6px]">
+      <div className="flex justify-between text-gray-500 border-t dark:text-gray-200 border-gray-300 dark:border-gray-500 py-[6px]">
         <MultiAvatar avatars={avatars || []} showSurplus={false} />
         <div className="flex items-center gap-1 ">
           <HiOutlineChat />
@@ -64,10 +63,9 @@ const TaskCard: FC<TaskCardProps> = ({ todo, completed, avatars, task, onEditTas
         </div>
       </div>
 
-      {/* Edit Task Modal */}
       <EditTaskModal
-        users={users || []} // Populate with actual users
-        project={project} // Pass the correct project details
+        users={users || []}
+        project={project}
         task={task}
         onEditTask={onEditTask}
         isOpen={isEditModalOpen}

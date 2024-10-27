@@ -5,6 +5,8 @@ import { LangProvider } from "./contexts/LangProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { UsersProvider } from "./contexts/UsersContext";
 import { TasksProvider } from "./contexts/TasksProvider";
+import { Toaster } from "react-hot-toast";
+import Navbar from "./components/NavBar";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +22,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <UsersProvider>
         <TasksProvider>
+
           <Router>
             <main dir={i18n.t("dir")} className="overflow-x-hidden">
               <LangProvider>
@@ -52,6 +55,7 @@ const App = () => {
                     </Route>
                   ))}
                 </Routes>
+                <Toaster/>
               </LangProvider>
             </main>
           </Router>

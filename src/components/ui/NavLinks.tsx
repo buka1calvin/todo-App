@@ -31,7 +31,7 @@ export default function NavLinks() {
             className={clsx(
               "flex items-center justify-center text-sm font-light relative py-3",
               {
-                "bg-gradient-to-r from-purple-100 to-transparent text-purple-600":
+                "bg-gradient-to-r dark:from-purple-50/10 from-purple-100 to-transparent text-purple-600":
                   isActive,
                 "text-gray-500": !isActive,
               }
@@ -40,7 +40,7 @@ export default function NavLinks() {
             {isActive && (
               <div className="absolute left-0 top-0 w-1 rounded-r-lg h-full bg-purple-600"></div>
             )}
-            <LinkIcon className={`${isActive ? "text-purple-600":"text-gray-500"} w-4 h-4`} />
+            <LinkIcon className={`${isActive ? "text-purple-600":"text-gray-500 dark:text-gray-200"} w-4 h-4`} />
           </Link>
         );
       })}

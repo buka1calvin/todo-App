@@ -2,13 +2,23 @@ import ProjectOverView from "./components/bashboard/projects/ProjectOverView";
 import Projects from "./components/bashboard/projects/Projects";
 import Home from "./components/home/Home";
 import DashLayout from "./Layouts/DashLayout";
+import Layout from "./Layouts/Layout";
 import ProjectsLayout from "./Layouts/ProjectsLayout";
 
 
 const routes = [
   {
     path: "/",
-    element: Home,
+    element: Layout,
+    children:[
+      {
+      path: "",
+      element:Home,
+      children: [
+        { path: "", element:"" },
+      ],
+      }
+    ]
   },
   {
     path: "dashboard",
@@ -16,11 +26,11 @@ const routes = [
     children: [
       {
         path: "projects",
-        element: ProjectsLayout, // Projects layout containing a TopNav or other common elements
+        element: ProjectsLayout,
         children: [
-          { path: "", element: Projects }, // Default Projects component under ProjectsLayout
-          { path: ":id", element:ProjectOverView }, // Example child route under Projects
-          { path: "subproject2", element: "" }, // Another child route
+          { path: "", element: Projects },
+          { path: ":id", element:ProjectOverView },
+          { path: "subproject2", element: "" },
         ],
       },
     ],

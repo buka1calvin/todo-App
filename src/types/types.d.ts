@@ -8,7 +8,7 @@ type User = {
 };
 
 type Task = {
-  id?: number;
+  id: number;
   todo: string;
   completed: boolean;
   userId?: number;
@@ -19,16 +19,18 @@ type Task = {
   files?: File[];
   from?: string;
   toDate?: string;
-  assignees:string[]
+  assignees:string[],
+  projectId:number;
+  access:string;
 };
 
 type Project = {
   id: number;
   name: string;
   tasks: Task[];
-  description?: string; // Optional description of the project
-  imageUrl?: string; // Optional image for the project
-  status?: string; // Optional status field for the project
+  description?: string;
+  imageUrl?: string;
+  status?: string;
   category: string;
 };
 

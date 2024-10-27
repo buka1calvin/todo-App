@@ -18,7 +18,7 @@ import { FaCirclePlus } from "react-icons/fa6";
 
 const ProjectOverview: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { projects, isLoading } = useTaskContext();
+  const { projects, isLoading,addTask,updateTask } = useTaskContext();
   const { users } = useUserContext();
   const [selectedAccess, setSelectedAccess] = useState<string>("Limited Access");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,11 +44,34 @@ const ProjectOverview: React.FC = () => {
 
   const handleCreateTask = (newTask: Task) => {
     console.log("Task created:", newTask);
+    newTask.projectId = project.id; 
+    addTask(newTask, project.id);
     setIsTaskModalOpen(false);
   };
 
   const handleAssignUsersToTask = (userIds: string[], taskId: string) => {
     console.log(`Assigned users ${userIds.join(", ")} to task ${taskId}`);
+  };
+
+  const handleEditTask = (editedTask: Task) => {
+    console.log("Task edited:", editedTask);
+    console.log(typeof editedTask.id)
+    const taskId = Number(editedTask.id);
+    if (!isNaN(taskId)) {
+      updateTask(taskId,{
+        todo: editedTask.todo,
+        description: editedTask.description,
+        from: editedTask.from,
+        toDate: editedTask.toDate,
+        dueDate: editedTask.dueDate,
+        priority: editedTask.priority,
+        completed: editedTask.completed,
+        access: editedTask.access,
+        assignees: editedTask.assignees 
+    },project.id);
+    } else {
+      console.error("Task ID is undefined or not a valid number.");
+    }
   };
 
   const filteredTasks = project.tasks.filter((task) => {
@@ -59,10 +82,10 @@ const ProjectOverview: React.FC = () => {
   });
 
   return (
-    <section className="w-full h-full flex flex-col gap-4">
+    <section className="w-full h-full flex flex-col gap-4 py-3">
       <h1 className="font-bold text-3xl mb-4">{project?.name}</h1>
-      <div className="flex justify-between items-center">
-        <div className="flex gap-3 items-center">
+      <div className="flex justify-between items-center md:flex-row flex-col md:gap-0 gap-4">
+        <div className="flex gap-3 items-center md:w-fit w-full md:justify-start justify-between">
           <CiUnlock className="text-gray-400" />
           <Selection
             options={["Limited Access", "Full Access", "All Access"]}
@@ -76,17 +99,17 @@ const ProjectOverview: React.FC = () => {
             onClick={() => setIsModalOpen(true)}
           />
         </div>
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center md:justify-center gap-3 md:w-fit w-full justify-end">
           <AiOutlineLink className="text-primary w-5 h-5" />
           <div className="h-5 w-[2px] rounded-full bg-slate-300"></div>
           <FaEquals
             className="p-1 bg-primary text-white w-5 h-5 rounded cursor-pointer"
-            onClick={() => setIsDrawerOpen(!isDrawerOpen)} // Toggle drawer
+            onClick={() => setIsDrawerOpen(!isDrawerOpen)}
           />
           <RiDashboardLine className="text-primary w-5 h-5" />
         </div>
       </div>
-      <div className="flex justify-between items-center text-gray-500 bg-white h-14 rounded-xl text-sm px-4">
+      <div className="flex md:flex-row flex-col md:gap-0 gap-4 py-1 justify-between items-center text-gray-500 bg-white dark:bg-white/10 md:h-14 rounded-xl text-sm px-4">
         <div className="flex font-medium gap-4">
           <NavTasks
             name="All Tasks"
@@ -107,13 +130,13 @@ const ProjectOverview: React.FC = () => {
             onClick={() => setFilter("Completed")}
           />
         </div>
-        <div className="flex gap-4">
-          <div className="flex items-center justify-center cursor-pointer border px-3 hover:shadow-inner hover:bg-slate-50 hover:shadow-gray-200">
+        <div className="flex gap-4 md:w-fit w-full justify-end dark:text-gray-200">
+          <div className="flex items-center justify-center cursor-pointer border dark:hover:text-gray-500 dark:border-gray-500 px-3 hover:shadow-inner hover:bg-slate-50 hover:shadow-gray-200">
             <RiEqualizer2Line />
             <p>Filter & Sort</p>
           </div>
           <button
-            className="flex py-1 px-3 rounded border items-center gap-1 hover:shadow-inner hover:bg-slate-50 hover:shadow-gray-200"
+            className="flex py-1 px-3 rounded border items-center dark:border-gray-500 dark:hover:text-gray-500 gap-1 hover:shadow-inner hover:bg-slate-50 hover:shadow-gray-200"
             onClick={() => setIsTaskModalOpen(true)}
           >
             <FaPlus />
@@ -137,7 +160,7 @@ const ProjectOverview: React.FC = () => {
               completed={task.completed}
               avatars={avatars}
               task={task}
-              onEditTask={(editedTask) => console.log("Edited Task:", editedTask)}
+              onEditTask={handleEditTask}
               key={task.id}
               users={users || []}
             />
@@ -162,7 +185,6 @@ const ProjectOverview: React.FC = () => {
           setIsOpen={setIsTaskModalOpen}
         />
       )}
-      {/* Drawer component */}
       <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} avatars={avatars} project={project}/>
     </section>
   );

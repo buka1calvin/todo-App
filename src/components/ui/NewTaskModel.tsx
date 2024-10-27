@@ -1,23 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import Chip from "./Chip";
 
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  image: string;
-}
 
-interface Project {
-  name: string;
-}
 
 interface NewTaskModalProps {
   users: User[];
   project: Project;
-  onCreateTask: (newTask: Task) => void;
+  onCreateTask: (newTask: Task) => void; // Callback for creating a new task
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
@@ -48,22 +37,30 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
       modalRef.current?.showModal();
     } else {
       modalRef.current?.close();
-      setSelectedUsers([]);
-      setTaskDetails({
-        todo: "",
-        description: "",
-        priority: "Medium",
-        dueDate: "",
-        from: "", // Reset "from" field
-        toDate: "", // Reset "toDate" field
-        access: "Limited Access",
-        comments: [],
-      });
-      setUserSearch("");
+      resetForm(); // Reset form on close
     }
   }, [isOpen]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const resetForm = () => {
+    setSelectedUsers([]);
+    setTaskDetails({
+      todo: "",
+      description: "",
+      priority: "Medium",
+      dueDate: "",
+      from: "", // Reset "from" field
+      toDate: "", // Reset "toDate" field
+      access: "Limited Access",
+      comments: [],
+    });
+    setUserSearch("");
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setTaskDetails((prev) => ({ ...prev, [name]: value }));
   };
@@ -83,85 +80,98 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
   };
 
   const handleCreateTask = () => {
+    if (!taskDetails.todo || !taskDetails.description || selectedUsers.length === 0) {
+      alert("Please provide task title, description, and select at least one assignee.");
+      return;
+    }
+
+    //@ts-ignore
     const newTask: Task = {
       ...taskDetails,
       completed: false,
+      userId: selectedUsers[0]?.id, // Assign head user as the primary assigned user
       assignees: selectedUsers.map((user) => user.id.toString()),
+      projectId: project.id, // Set the project ID here
     };
-    onCreateTask(newTask);
+  
+    console.log("New Task created:", newTask);
+    onCreateTask(newTask); // Call the onCreateTask prop with the new task
     setIsOpen(false);
   };
+  
 
   return (
-    <dialog ref={modalRef} className="modal">
-      <div className="modal-box p-5">
-        <h3 className="font-bold text-lg mb-4">Create New Task for {project.name}</h3>
+    <dialog ref={modalRef} className="modal dark:bg-white/10">
+      <div className="modal-box p-5 dark:bg-gray-900">
+        <h3 className="font-bold text-lg mb-4 dark:text-white">Create New Task for {project.name}</h3>
 
-        {/* Task Details */}
+        {/* Task Title */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Task Title</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Task Title</label>
           <input
             type="text"
             name="todo"
             value={taskDetails.todo}
             onChange={handleInputChange}
-            className="input w-full mb-2 text-sm border border-green-400"
+            className="input w-full mb-2 text-sm border dark:text-white border-green-400 dark:bg-white/10"
             placeholder="Task title"
           />
         </div>
+
+        {/* Description */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Description</label>
           <textarea
             name="description"
             value={taskDetails.description}
             onChange={handleInputChange}
-            className="textarea w-full text-sm border border-green-400"
+            className="textarea w-full text-sm border dark:text-white border-green-400 dark:bg-white/10"
             placeholder="Task description"
           />
         </div>
 
-        {/* From Date, To Date, Due Date, and Priority */}
+        {/* Dates and Priority */}
         <div className="mb-4 flex gap-4">
           <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">From Date</label>
             <input
               type="date"
               name="from"
               value={taskDetails.from}
               onChange={handleInputChange}
-              className="input w-full text-sm border border-green-400"
+              className="input w-full text-sm border dark:text-white border-green-400 dark:bg-white/10"
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">To Date</label>
             <input
               type="date"
               name="toDate"
               value={taskDetails.toDate}
               onChange={handleInputChange}
-              className="input w-full text-sm border border-green-400"
+              className="input w-full text-sm border border-green-400 dark:text-white dark:bg-white/10"
             />
           </div>
         </div>
 
         <div className="mb-4 flex gap-4">
-          <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+          <div className="w-1/2 dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Due Date</label>
             <input
               type="date"
               name="dueDate"
               value={taskDetails.dueDate}
               onChange={handleInputChange}
-              className="input w-full text-sm border border-green-400"
+              className="input w-full text-sm border border-green-400 dark:text-white dark:bg-white/10"
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Priority</label>
             <select
               name="priority"
               value={taskDetails.priority}
               onChange={handleInputChange}
-              className="select w-full text-sm  border border-green-400"
+              className="select w-full text-sm border border-green-400 dark:bg-gray-700 dark:text-white"
             >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
@@ -172,12 +182,12 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
 
         {/* Access Level */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Access Level</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Access Level</label>
           <select
             name="access"
             value={taskDetails.access}
             onChange={handleInputChange}
-            className="select w-full text-sm border border-green-400"
+            className="select w-full text-sm border border-green-400 dark:bg-gray-700 dark:text-white"
           >
             <option value="Limited Access">Limited Access</option>
             <option value="Full Access">Full Access</option>
@@ -187,20 +197,20 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
 
         {/* User Selection */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Assign Users</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">Assign Users</label>
           <input
             type="text"
             placeholder="Search user..."
             value={userSearch}
             onChange={(e) => setUserSearch(e.target.value)}
-            className="input w-full mb-2 text-sm border border-green-400"
+            className="input w-full mb-2 text-sm border border-green-400 dark:bg-white/10 dark:text-white"
           />
           <div className="border rounded p-2 max-h-28 overflow-y-auto text-xs font-medium">
             {filteredUsers.map((user) => (
               <div
                 key={user.id}
                 onClick={() => handleAddUser(user)}
-                className="cursor-pointer p-2 hover:bg-gray-200 rounded"
+                className="cursor-pointer p-2 hover:bg-gray-200 rounded dark:text-white dark:hover:text-gray-500"
               >
                 {user.firstName} {user.lastName}
               </div>
@@ -219,7 +229,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({
             Close
           </button>
           <button
-            className="btn btn-primary"
+            className="btn btn-primary dark:text-white"
             onClick={handleCreateTask}
             disabled={!taskDetails.todo || selectedUsers.length === 0}
           >

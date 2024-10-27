@@ -50,13 +50,13 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ users, tasks, onAssignUse
     };
 
     return (
-        <dialog ref={modalRef} className="modal">
-            <div className="modal-box p-5">
-                <h3 className="font-bold text-lg mb-4">Assign Users to Task</h3>
+        <dialog ref={modalRef} className="modal dark:bg-white/10">
+            <div className="modal-box p-5 dark:bg-gray-900">
+                <h3 className="font-bold text-lg mb-4 dark:text-white">Assign Users to Task</h3>
 
                 {/* User Search and Selection */}
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                         Search Users
                     </label>
                     <input
@@ -64,7 +64,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ users, tasks, onAssignUse
                         placeholder="Search user..."
                         value={userSearch}
                         onChange={(e) => setUserSearch(e.target.value)}
-                        className="input w-full mb-2 text-sm"
+                        className="input w-full mb-2 text-sm dark:bg-white/10 dark:text-white"
                     />
 
                     {/* Display Filtered Users for Selection */}
@@ -73,7 +73,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ users, tasks, onAssignUse
                             <div
                                 key={user.id}
                                 onClick={() => handleAddUser(user)}
-                                className="cursor-pointer p-2 hover:bg-gray-200 rounded"
+                                className="cursor-pointer p-2 hover:bg-gray-200 rounded dark:text-white dark:hover:text-gray-700"
                             >
                                 {user.firstName} {user.lastName}
                             </div>
@@ -92,12 +92,12 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ users, tasks, onAssignUse
                     </div>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                         Select Task
                     </label>
                     <select
                         onChange={(e) => setSelectedTask(e.target.value)}
-                        className="select w-full"
+                        className="select w-full dark:bg-gray-700 dark:text-white"
                         value={selectedTask || ""}
                     >
                         <option value="">Select Task</option>
@@ -115,7 +115,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ users, tasks, onAssignUse
                         Close
                     </button>
                     <button
-                        className="btn btn-primary"
+                        className="btn btn-primary dark:text-white"
                         onClick={handleAssign}
                         disabled={!selectedTask || selectedUsers.length === 0}
                     >
